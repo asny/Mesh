@@ -9,11 +9,81 @@
 #pragma once
 
 #include "Mesh.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
-class MeshCreator {
-    
+class MeshCreator
+{
     
 public:
+    
+    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec2>& uv_attribute, geogo::Attribute<geogo::VertexID, glm::vec3>& normal_attribute)
+    {
+        std::vector<glm::vec3> positions, normals;
+        std::vector<glm::vec2> uv_coordinates;
+        std::vector<unsigned int> position_indices, uv_coordinates_indices, normal_indices;
+        
+        bool load_success = load_obj(file_path, positions, position_indices, uv_coordinates, uv_coordinates_indices, normals, normal_indices);
+        if(load_success)
+        {
+            // Create the vertices
+            auto mapping = std::map<unsigned int, geogo::VertexID*>();
+            for( unsigned int i = 0; i < positions.size(); i++ )
+            {
+                auto vertex_id = geometry.create_vertex(positions.at(i));
+                mapping[i] = vertex_id;
+            }
+            
+            // Create the faces
+            for (unsigned int i = 0; i < position_indices.size(); i += 3)
+            {
+                auto vertex_id1 = mapping[position_indices[i] - 1];
+                auto vertex_id2 = mapping[position_indices[i+1] - 1];
+                auto vertex_id3 = mapping[position_indices[i+2] - 1];
+                geometry.create_face(vertex_id1, vertex_id2, vertex_id3);
+            }
+            
+            // Add the uv coordinate attribute
+            if(uv_coordinates.size() > 0 && uv_coordinates_indices.size() > 0)
+            {
+                for( unsigned int i = 0; i < normals.size(); i++ )
+                {
+                    // TODO: For now, we only support per vertex attributes
+                    uv_attribute.at(mapping[i]) = uv_coordinates.at(i);
+                }
+            }
+            
+            // Add the normal attribute
+            if(normals.size() > 0 && normal_indices.size() > 0)
+            {
+                for( unsigned int i = 0; i < normals.size(); i++ )
+                {
+                    // TODO: For now, we only support per vertex attributes
+                    normal_attribute.at(mapping[i]) = normals.at(i);
+                }
+            }
+        }
+    }
+    
+    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec3>& normals)
+    {
+        geogo::Attribute<geogo::VertexID, glm::vec2> uv_coordinates;
+        load_from_obj(file_path, geometry, uv_coordinates, normals);
+    }
+    
+    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec2>& uv_coordinates)
+    {
+        geogo::Attribute<geogo::VertexID, glm::vec3> normals;
+        load_from_obj(file_path, geometry, uv_coordinates, normals);
+    }
+    
+    static void load_from_obj(std::string file_path, geogo::Mesh& geometry)
+    {
+        geogo::Attribute<geogo::VertexID, glm::vec2> uv_coordinates;
+        geogo::Attribute<geogo::VertexID, glm::vec3> normals;
+        load_from_obj(file_path, geometry, uv_coordinates, normals);
+    }
     
     static std::shared_ptr<geogo::Mesh> create_box(bool view_from_inside)
     {
@@ -81,5 +151,93 @@ public:
             mesh->create_face(vertexPPN, vertexPPP, vertexPNP);
         }
         return mesh;
+    }
+    
+private:
+    
+    
+    static bool load_obj(std::string file_path, std::vector<glm::vec3>& positions, std::vector<unsigned int>& position_indices,
+                         std::vector<glm::vec2>& uv_coordinates, std::vector<unsigned int>& uv_coordinate_indices,
+                         std::vector<glm::vec3>& normals, std::vector<unsigned int>& normal_indices)
+    {
+        std::string line;
+        std::ifstream myfile(file_path);
+        if (!myfile.is_open())
+        {
+            return false;
+        }
+        
+        while ( getline(myfile, line) )
+        {
+            std::stringstream stream(line);
+            std::string header;
+            stream >> header;
+            if ( header.compare("v") == 0 )
+            {
+                glm::vec3 position;
+                std::string value;
+                for (int i = 0; i < 3; i++)
+                {
+                    stream >> value;
+                    position[i] = stod(value);
+                }
+                positions.push_back(position);
+            }
+            else if ( header.compare("vt") == 0 )
+            {
+                glm::vec2 uv_coordinate;
+                std::string value;
+                for (int i = 0; i < 2; i++)
+                {
+                    stream >> value;
+                    uv_coordinate[i] = stod(value);
+                }
+                uv_coordinates.push_back(uv_coordinate);
+            }
+            else if ( header.compare("vn") == 0 )
+            {
+                glm::vec3 normal;
+                std::string value;
+                for (int i = 0; i < 3; i++)
+                {
+                    stream >> value;
+                    normal[i] = stod(value);
+                }
+                normals.push_back(normal);
+            }
+            else if ( header.compare("f") == 0 )
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    std::string indices;
+                    stream >> indices;
+                    std::stringstream stream2(indices);
+                    std::string value;
+                    int j = 0;
+                    while (getline(stream2, value, '/'))
+                    {
+                        if(value.length() != 0)
+                        {
+                            if(j % 3 == 0)
+                            {
+                                position_indices.push_back(stoi(value));
+                            }
+                            else if(j % 3 == 1)
+                            {
+                                uv_coordinate_indices.push_back(stoi(value));
+                            }
+                            else if(j % 3 == 2)
+                            {
+                                normal_indices.push_back(stoi(value));
+                            }
+                        }
+                        j++;
+                    }
+                }
+            }
+        }
+        myfile.close();
+        
+        return true;
     }
 };
