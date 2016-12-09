@@ -1,5 +1,5 @@
 //
-//  GeometryCreator.h
+//  MeshCreator.h
 //  Spider
 //
 //  Created by Asger Nyman Christiansen on 09/12/2016.
@@ -15,71 +15,71 @@ class MeshCreator {
     
 public:
     
-    static std::shared_ptr<geogo::Geometry> create_box(bool view_from_inside)
+    static std::shared_ptr<geogo::Mesh> create_box(bool view_from_inside)
     {
-        auto geometry = std::shared_ptr<geogo::Geometry>(new geogo::Geometry());
+        auto mesh = std::shared_ptr<geogo::Mesh>(new geogo::Mesh());
         
-        auto vertexNNP = geometry->create_vertex(glm::vec3(-1.0, -1.0,  1.0));
-        auto vertexPPP = geometry->create_vertex(glm::vec3(1.0, 1.0,  1.0));
-        auto vertexPNP = geometry->create_vertex(glm::vec3(1.0, -1.0,  1.0));
-        auto vertexNPP = geometry->create_vertex(glm::vec3(-1.0, 1.0,  1.0));
+        auto vertexNNP = mesh->create_vertex(glm::vec3(-1.0, -1.0,  1.0));
+        auto vertexPPP = mesh->create_vertex(glm::vec3(1.0, 1.0,  1.0));
+        auto vertexPNP = mesh->create_vertex(glm::vec3(1.0, -1.0,  1.0));
+        auto vertexNPP = mesh->create_vertex(glm::vec3(-1.0, 1.0,  1.0));
         
-        auto vertexNNN = geometry->create_vertex(glm::vec3(-1.0, -1.0,  -1.0));
-        auto vertexPPN = geometry->create_vertex(glm::vec3(1.0, 1.0,  -1.0));
-        auto vertexPNN = geometry->create_vertex(glm::vec3(1.0, -1.0,  -1.0));
-        auto vertexNPN = geometry->create_vertex(glm::vec3(-1.0, 1.0,  -1.0));
+        auto vertexNNN = mesh->create_vertex(glm::vec3(-1.0, -1.0,  -1.0));
+        auto vertexPPN = mesh->create_vertex(glm::vec3(1.0, 1.0,  -1.0));
+        auto vertexPNN = mesh->create_vertex(glm::vec3(1.0, -1.0,  -1.0));
+        auto vertexNPN = mesh->create_vertex(glm::vec3(-1.0, 1.0,  -1.0));
         
         if(view_from_inside)
         {
             // Front
-            geometry->create_face(vertexNNP, vertexPPP, vertexPNP);
-            geometry->create_face(vertexPPP, vertexNNP, vertexNPP);
+            mesh->create_face(vertexNNP, vertexPPP, vertexPNP);
+            mesh->create_face(vertexPPP, vertexNNP, vertexNPP);
             
             // Top
-            geometry->create_face(vertexNPP, vertexPPN, vertexPPP);
-            geometry->create_face(vertexPPN, vertexNPP, vertexNPN);
+            mesh->create_face(vertexNPP, vertexPPN, vertexPPP);
+            mesh->create_face(vertexPPN, vertexNPP, vertexNPN);
             
             // Back
-            geometry->create_face(vertexPNN, vertexNPN, vertexNNN);
-            geometry->create_face(vertexNPN, vertexPNN, vertexPPN);
+            mesh->create_face(vertexPNN, vertexNPN, vertexNNN);
+            mesh->create_face(vertexNPN, vertexPNN, vertexPPN);
             
             // Bottom
-            geometry->create_face(vertexNNN, vertexPNP, vertexPNN);
-            geometry->create_face(vertexPNP, vertexNNN, vertexNNP);
+            mesh->create_face(vertexNNN, vertexPNP, vertexPNN);
+            mesh->create_face(vertexPNP, vertexNNN, vertexNNP);
             
             // Left
-            geometry->create_face(vertexNNN, vertexNPP, vertexNNP);
-            geometry->create_face(vertexNPP, vertexNNN, vertexNPN);
+            mesh->create_face(vertexNNN, vertexNPP, vertexNNP);
+            mesh->create_face(vertexNPP, vertexNNN, vertexNPN);
             
             // Right
-            geometry->create_face(vertexPNP, vertexPPN, vertexPNN);
-            geometry->create_face(vertexPPN, vertexPNP, vertexPPP);
+            mesh->create_face(vertexPNP, vertexPPN, vertexPNN);
+            mesh->create_face(vertexPPN, vertexPNP, vertexPPP);
         }
         else {
             // Front
-            geometry->create_face(vertexNNP, vertexPNP, vertexPPP);
-            geometry->create_face(vertexPPP, vertexNPP, vertexNNP);
+            mesh->create_face(vertexNNP, vertexPNP, vertexPPP);
+            mesh->create_face(vertexPPP, vertexNPP, vertexNNP);
             
             // Top
-            geometry->create_face(vertexNPP, vertexPPP, vertexPPN);
-            geometry->create_face(vertexPPN, vertexNPN, vertexNPP);
+            mesh->create_face(vertexNPP, vertexPPP, vertexPPN);
+            mesh->create_face(vertexPPN, vertexNPN, vertexNPP);
             
             // Back
-            geometry->create_face(vertexPNN, vertexNNN, vertexNPN);
-            geometry->create_face(vertexNPN, vertexPPN, vertexPNN);
+            mesh->create_face(vertexPNN, vertexNNN, vertexNPN);
+            mesh->create_face(vertexNPN, vertexPPN, vertexPNN);
             
             // Bottom
-            geometry->create_face(vertexNNN, vertexPNN, vertexPNP);
-            geometry->create_face(vertexPNP, vertexNNP, vertexNNN);
+            mesh->create_face(vertexNNN, vertexPNN, vertexPNP);
+            mesh->create_face(vertexPNP, vertexNNP, vertexNNN);
             
             // Left
-            geometry->create_face(vertexNNN, vertexNNP, vertexNPP);
-            geometry->create_face(vertexNPP, vertexNPN, vertexNNN);
+            mesh->create_face(vertexNNN, vertexNNP, vertexNPP);
+            mesh->create_face(vertexNPP, vertexNPN, vertexNNN);
             
             // Right
-            geometry->create_face(vertexPNP, vertexPNN, vertexPPN);
-            geometry->create_face(vertexPPN, vertexPPP, vertexPNP);
+            mesh->create_face(vertexPNP, vertexPNN, vertexPPN);
+            mesh->create_face(vertexPPN, vertexPPP, vertexPNP);
         }
-        return geometry;
+        return mesh;
     }
 };

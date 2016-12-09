@@ -37,7 +37,7 @@ namespace geogo
     
     class VertexID : public ID
     {
-        friend class Geometry;
+        friend class Mesh;
         
         VertexID(int id, ID* previous) : ID(id, previous)
         {
@@ -53,7 +53,7 @@ namespace geogo
     
     class EdgeID : public ID
     {
-        friend class Geometry;
+        friend class Mesh;
         
         VertexID* vertex1;
         VertexID* vertex2;
@@ -83,7 +83,7 @@ namespace geogo
     
     class FaceID : public ID
     {
-        friend class Geometry;
+        friend class Mesh;
         
         VertexID* vertex1;
         VertexID* vertex2;

@@ -1,5 +1,5 @@
 //
-//  Geometry.hpp
+//  Mesh.hpp
 //  Spider
 //
 //  Created by Asger Nyman Christiansen on 26/07/16.
@@ -17,7 +17,7 @@
 namespace geogo
 {
     
-    class Geometry
+    class Mesh
     {
         VertexID* start_vertex = nullptr;
         VertexID* end_vertex = nullptr;
@@ -35,12 +35,12 @@ namespace geogo
         std::shared_ptr<Attribute<VertexID, glm::vec3>> position_attribute = std::make_shared<Attribute<VertexID, glm::vec3>>();
         
     public:
-        Geometry()
+        Mesh()
         {
             
         }
         
-        ~Geometry()
+        ~Mesh()
         {
             for(auto vertex = vertices_begin(); vertex != vertices_end(); )
             {
