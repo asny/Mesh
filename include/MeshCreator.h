@@ -153,6 +153,33 @@ public:
         return mesh;
     }
     
+    static std::shared_ptr<geogo::Mesh> create_quad()
+    {
+        auto mesh = std::make_shared<geogo::Mesh>();
+        
+        geogo::VertexID* v1 = mesh->create_vertex(glm::vec3(0., 0., 0.));
+        geogo::VertexID* v2 = mesh->create_vertex(glm::vec3(0., 1., 0.));
+        geogo::VertexID* v3 = mesh->create_vertex(glm::vec3(1., 1., 0.));
+        geogo::VertexID* v4 = mesh->create_vertex(glm::vec3(1., 0., 0.));
+        mesh->create_face(v1, v3, v2);
+        mesh->create_face(v3, v1, v4);
+        
+        return mesh;
+    }
+    
+    static std::shared_ptr<geogo::Mesh> create_quad(std::shared_ptr<geogo::Attribute<geogo::VertexID, glm::vec3>>& normals)
+    {
+        auto mesh = create_quad();
+        
+        // Normals
+        for(auto vertexId = mesh->vertices_begin(); vertexId != mesh->vertices_end(); vertexId = vertexId->next())
+        {
+            normals->at(vertexId) = glm::vec3(0., 0., 1.);
+        }
+        
+        return mesh;
+    }
+    
 private:
     
     
