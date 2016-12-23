@@ -48,6 +48,12 @@ namespace geogo
                 delete vertex;
                 vertex = temp;
             }
+            for(auto edge = edges_begin(); edge != edges_end(); )
+            {
+                auto temp = edge->next();
+                delete edge;
+                edge = temp;
+            }
             for(auto face = faces_begin(); face != faces_end(); )
             {
                 auto temp = face->next();
