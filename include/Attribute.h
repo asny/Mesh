@@ -14,7 +14,7 @@
 
 #include "Property.h"
 
-namespace geogo
+namespace mesh
 {
     template <class IDType, class ValueType>
     class Attribute

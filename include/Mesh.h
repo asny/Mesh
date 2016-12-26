@@ -14,7 +14,7 @@
 #include "vec3.hpp"
 #include "ID.h"
 
-namespace geogo
+namespace mesh
 {
     
     class Mesh

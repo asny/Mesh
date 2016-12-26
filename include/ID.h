@@ -9,7 +9,7 @@
 #pragma once
 #include <vector>
 
-namespace geogo
+namespace mesh
 {
     class ID
     {

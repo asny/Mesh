@@ -18,7 +18,7 @@ class MeshCreator
     
 public:
     
-    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec2>& uv_attribute, geogo::Attribute<geogo::VertexID, glm::vec3>& normal_attribute)
+    static void load_from_obj(std::string file_path, mesh::Mesh& geometry, mesh::Attribute<mesh::VertexID, glm::vec2>& uv_attribute, mesh::Attribute<mesh::VertexID, glm::vec3>& normal_attribute)
     {
         std::vector<glm::vec3> positions, normals;
         std::vector<glm::vec2> uv_coordinates;
@@ -28,7 +28,7 @@ public:
         if(load_success)
         {
             // Create the vertices
-            auto mapping = std::map<unsigned int, geogo::VertexID*>();
+            auto mapping = std::map<unsigned int, mesh::VertexID*>();
             for( unsigned int i = 0; i < positions.size(); i++ )
             {
                 auto vertex_id = geometry.create_vertex(positions.at(i));
@@ -66,28 +66,28 @@ public:
         }
     }
     
-    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec3>& normals)
+    static void load_from_obj(std::string file_path, mesh::Mesh& geometry, mesh::Attribute<mesh::VertexID, glm::vec3>& normals)
     {
-        geogo::Attribute<geogo::VertexID, glm::vec2> uv_coordinates;
+        mesh::Attribute<mesh::VertexID, glm::vec2> uv_coordinates;
         load_from_obj(file_path, geometry, uv_coordinates, normals);
     }
     
-    static void load_from_obj(std::string file_path, geogo::Mesh& geometry, geogo::Attribute<geogo::VertexID, glm::vec2>& uv_coordinates)
+    static void load_from_obj(std::string file_path, mesh::Mesh& geometry, mesh::Attribute<mesh::VertexID, glm::vec2>& uv_coordinates)
     {
-        geogo::Attribute<geogo::VertexID, glm::vec3> normals;
+        mesh::Attribute<mesh::VertexID, glm::vec3> normals;
         load_from_obj(file_path, geometry, uv_coordinates, normals);
     }
     
-    static void load_from_obj(std::string file_path, geogo::Mesh& geometry)
+    static void load_from_obj(std::string file_path, mesh::Mesh& geometry)
     {
-        geogo::Attribute<geogo::VertexID, glm::vec2> uv_coordinates;
-        geogo::Attribute<geogo::VertexID, glm::vec3> normals;
+        mesh::Attribute<mesh::VertexID, glm::vec2> uv_coordinates;
+        mesh::Attribute<mesh::VertexID, glm::vec3> normals;
         load_from_obj(file_path, geometry, uv_coordinates, normals);
     }
     
-    static std::shared_ptr<geogo::Mesh> create_box(bool view_from_inside)
+    static std::shared_ptr<mesh::Mesh> create_box(bool view_from_inside)
     {
-        auto mesh = std::shared_ptr<geogo::Mesh>(new geogo::Mesh());
+        auto mesh = std::shared_ptr<mesh::Mesh>(new mesh::Mesh());
         
         auto vertexNNP = mesh->create_vertex(glm::vec3(-1.0, -1.0,  1.0));
         auto vertexPPP = mesh->create_vertex(glm::vec3(1.0, 1.0,  1.0));
@@ -153,21 +153,21 @@ public:
         return mesh;
     }
     
-    static std::shared_ptr<geogo::Mesh> create_quad()
+    static std::shared_ptr<mesh::Mesh> create_quad()
     {
-        auto mesh = std::make_shared<geogo::Mesh>();
+        auto mesh = std::make_shared<mesh::Mesh>();
         
-        geogo::VertexID* v1 = mesh->create_vertex(glm::vec3(0., 0., 0.));
-        geogo::VertexID* v2 = mesh->create_vertex(glm::vec3(0., 1., 0.));
-        geogo::VertexID* v3 = mesh->create_vertex(glm::vec3(1., 1., 0.));
-        geogo::VertexID* v4 = mesh->create_vertex(glm::vec3(1., 0., 0.));
+        mesh::VertexID* v1 = mesh->create_vertex(glm::vec3(0., 0., 0.));
+        mesh::VertexID* v2 = mesh->create_vertex(glm::vec3(0., 1., 0.));
+        mesh::VertexID* v3 = mesh->create_vertex(glm::vec3(1., 1., 0.));
+        mesh::VertexID* v4 = mesh->create_vertex(glm::vec3(1., 0., 0.));
         mesh->create_face(v1, v3, v2);
         mesh->create_face(v3, v1, v4);
         
         return mesh;
     }
     
-    static std::shared_ptr<geogo::Mesh> create_quad(std::shared_ptr<geogo::Attribute<geogo::VertexID, glm::vec3>>& normals)
+    static std::shared_ptr<mesh::Mesh> create_quad(std::shared_ptr<mesh::Attribute<mesh::VertexID, glm::vec3>>& normals)
     {
         auto mesh = create_quad();
         
