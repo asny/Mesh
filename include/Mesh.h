@@ -106,32 +106,32 @@ namespace mesh
             return position_attribute;
         }
         
-        VertexID* vertices_begin()
+        const VertexID* vertices_begin()
         {
             return start_vertex;
         }
         
-        VertexID* vertices_end()
+        const VertexID* vertices_end()
         {
             return nullptr;
         }
         
-        EdgeID* edges_begin()
+        const EdgeID* edges_begin()
         {
             return start_edge;
         }
         
-        EdgeID* edges_end()
+        const EdgeID* edges_end()
         {
             return nullptr;
         }
         
-        FaceID* faces_begin()
+        const FaceID* faces_begin()
         {
             return start_face;
         }
         
-        FaceID* faces_end()
+        const FaceID* faces_end()
         {
             return nullptr;
         }

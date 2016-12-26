@@ -45,7 +45,7 @@ namespace mesh
         }
         
     public:
-        VertexID* next()
+        const VertexID* next() const
         {
             return static_cast<VertexID*>(ID::next);
         }
@@ -65,17 +65,17 @@ namespace mesh
         }
         
     public:
-        EdgeID* next()
+        const EdgeID* next() const
         {
             return static_cast<EdgeID*>(ID::next);
         }
         
-        VertexID* v1()
+        const VertexID* v1() const
         {
             return vertex1;
         }
         
-        VertexID* v2()
+        const VertexID* v2() const
         {
             return vertex2;
         }
@@ -96,22 +96,22 @@ namespace mesh
         }
         
     public:
-        FaceID* next()
+        const FaceID* next() const
         {
             return static_cast<FaceID*>(ID::next);
         }
         
-        VertexID* v1()
+        const VertexID* v1() const
         {
             return vertex1;
         }
         
-        VertexID* v2()
+        const VertexID* v2() const
         {
             return vertex2;
         }
         
-        VertexID* v3()
+        const VertexID* v3() const
         {
             return vertex3;
         }
