@@ -35,9 +35,15 @@ namespace mesh
         friend bool operator!=(const ID& a, const ID& b) { return a.id != b.id; }
     };
     
+    class EdgeID;
+    class FaceID;
+    
     class VertexID : public ID
     {
         friend class Mesh;
+        friend class FaceID;
+        
+        std::vector<const FaceID*> neighbouring_faces = std::vector<const FaceID*>();
         
         VertexID(int id, ID* previous) : ID(id, previous)
         {
@@ -48,6 +54,11 @@ namespace mesh
         const VertexID* next() const
         {
             return static_cast<VertexID*>(ID::next);
+        }
+        
+        const std::vector<const FaceID*>& faces() const
+        {
+            return neighbouring_faces;
         }
     };
     
@@ -92,7 +103,9 @@ namespace mesh
         FaceID(int id, FaceID* previous, VertexID* _vertex1, VertexID* _vertex2, VertexID* _vertex3)
         : ID(id, previous), vertex1(_vertex1), vertex2(_vertex2), vertex3(_vertex3)
         {
-            
+            vertex1->neighbouring_faces.push_back(this);
+            vertex2->neighbouring_faces.push_back(this);
+            vertex3->neighbouring_faces.push_back(this);
         }
         
     public:
