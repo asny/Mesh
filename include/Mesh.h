@@ -10,6 +10,7 @@
 
 #include "Attribute.h"
 #include <vector>
+#include "glm.hpp"
 #include "vec2.hpp"
 #include "vec3.hpp"
 #include "ID.h"
@@ -33,6 +34,7 @@ namespace mesh
         int no_faces = 0;
         
         std::shared_ptr<Attribute<VertexID, glm::vec3>> position_attribute = std::make_shared<Attribute<VertexID, glm::vec3>>();
+        std::shared_ptr<Attribute<VertexID, glm::vec3>> normal_attribute = nullptr;
         
     public:
         Mesh()
@@ -104,6 +106,36 @@ namespace mesh
         std::shared_ptr<const Attribute<VertexID, glm::vec3>> position() const
         {
             return position_attribute;
+        }
+        
+        glm::vec3 normal(const FaceID* facet)
+        {
+            glm::vec3 p1 = position()->at(facet->v1());
+            glm::vec3 p2 = position()->at(facet->v2());
+            glm::vec3 p3 = position()->at(facet->v3());
+            return normalize(cross(p2 - p1, p3 - p1));
+        }
+        
+        glm::vec3 normal(const VertexID* vertex)
+        {
+            auto n = glm::vec3(0., 0., 0.);
+            for (auto face : vertex->faces()) {
+                n += normal(face);
+            }
+            return normalize(n);
+        }
+        
+        std::shared_ptr<Attribute<VertexID, glm::vec3>> normal()
+        {
+            if(!normal_attribute)
+            {
+                normal_attribute = std::make_shared<Attribute<VertexID, glm::vec3>>();
+                for (auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
+                {
+                    normal_attribute->at(vertex) = normal(vertex);
+                }
+            }
+            return normal_attribute;
         }
         
         const VertexID* vertices_begin()
