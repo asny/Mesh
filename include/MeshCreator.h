@@ -157,10 +157,10 @@ public:
     {
         auto mesh = std::make_shared<mesh::Mesh>();
         
-        mesh::VertexID* v1 = mesh->create_vertex(glm::vec3(0., 0., 0.));
-        mesh::VertexID* v2 = mesh->create_vertex(glm::vec3(0., 1., 0.));
+        mesh::VertexID* v1 = mesh->create_vertex(glm::vec3(-1., -1., 0.));
+        mesh::VertexID* v2 = mesh->create_vertex(glm::vec3(-1., 1., 0.));
         mesh::VertexID* v3 = mesh->create_vertex(glm::vec3(1., 1., 0.));
-        mesh::VertexID* v4 = mesh->create_vertex(glm::vec3(1., 0., 0.));
+        mesh::VertexID* v4 = mesh->create_vertex(glm::vec3(1., -1., 0.));
         mesh->create_face(v1, v3, v2);
         mesh->create_face(v3, v1, v4);
         
