@@ -180,6 +180,22 @@ public:
         return mesh;
     }
     
+    static std::shared_ptr<mesh::Mesh> create_quad(std::shared_ptr<mesh::Attribute<mesh::VertexID, glm::vec2>>& uv_coordinates)
+    {
+        auto mesh = create_quad();
+        
+        auto vertexId = mesh->vertices_begin();
+        uv_coordinates->at(vertexId) = glm::vec2(0., 0.);
+        vertexId = vertexId->next();
+        uv_coordinates->at(vertexId) = glm::vec2(0., 1.);
+        vertexId = vertexId->next();
+        uv_coordinates->at(vertexId) = glm::vec2(1., 1.);
+        vertexId = vertexId->next();
+        uv_coordinates->at(vertexId) = glm::vec2(1., 0.);
+        
+        return mesh;
+    }
+    
 private:
     
     
