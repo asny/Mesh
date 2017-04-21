@@ -98,7 +98,7 @@ namespace mesh
             return end_face;
         }
         
-        std::shared_ptr<Attribute<VertexID, glm::vec3>> position()
+        const std::shared_ptr<Attribute<VertexID, glm::vec3>>& position()
         {
             return position_attribute;
         }
@@ -110,9 +110,9 @@ namespace mesh
         
         glm::vec3 normal(const FaceID* facet)
         {
-            glm::vec3 p1 = position()->at(facet->v1());
-            glm::vec3 p2 = position()->at(facet->v2());
-            glm::vec3 p3 = position()->at(facet->v3());
+            glm::vec3 p1 = position_attribute->at(facet->v1());
+            glm::vec3 p2 = position_attribute->at(facet->v2());
+            glm::vec3 p3 = position_attribute->at(facet->v3());
             return normalize(cross(p2 - p1, p3 - p1));
         }
         
