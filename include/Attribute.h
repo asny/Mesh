@@ -9,7 +9,7 @@
 #pragma once
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "Property.h"
@@ -58,7 +58,7 @@ namespace mesh
         }
         
     private:
-        std::map<IDType, Property<ValueType>> mapping;
+        std::unordered_map<IDType, Property<ValueType>> mapping;
         std::vector<std::function<void()>> subscribers = std::vector<std::function<void()>>();
         std::function<void()> on_property_changed;
         

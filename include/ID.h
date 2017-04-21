@@ -26,7 +26,7 @@ namespace mesh
         }
         
     public:
-        
+        const int key() const { return id; }
         friend bool operator<(const ID& a, const ID& b) { return a.id < b.id; }
         friend bool operator>(const ID& a, const ID& b) { return a.id > b.id; }
         friend bool operator<=(const ID& a, const ID& b) { return a.id <= b.id; }
@@ -127,6 +127,37 @@ namespace mesh
         const VertexID* v3() const
         {
             return vertex3;
+        }
+    };
+}
+
+
+namespace std
+{
+    template <>
+    struct hash<mesh::VertexID>
+    {
+        std::size_t operator()(const mesh::VertexID& k) const
+        {
+            return std::hash<int>()(k.key());
+        }
+    };
+    
+    template <>
+    struct hash<mesh::EdgeID>
+    {
+        std::size_t operator()(const mesh::EdgeID& k) const
+        {
+            return std::hash<int>()(k.key());
+        }
+    };
+    
+    template <>
+    struct hash<mesh::FaceID>
+    {
+        std::size_t operator()(const mesh::FaceID& k) const
+        {
+            return std::hash<int>()(k.key());
         }
     };
 }
