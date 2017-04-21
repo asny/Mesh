@@ -129,13 +129,21 @@ namespace mesh
         {
             if(!normal_attribute)
             {
-                normal_attribute = std::make_shared<Attribute<VertexID, glm::vec3>>();
-                for (auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
-                {
-                    normal_attribute->at(vertex) = normal(vertex);
-                }
+                update_normals();
             }
             return normal_attribute;
+        }
+        
+        void update_normals()
+        {
+            if(!normal_attribute)
+            {
+                normal_attribute = std::make_shared<Attribute<VertexID, glm::vec3>>();
+            }
+            for (auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
+            {
+                normal_attribute->at(vertex) = normal(vertex);
+            }
         }
         
         const VertexID* vertices_begin()
