@@ -108,7 +108,7 @@ namespace mesh
             return position_attribute;
         }
         
-        glm::vec3 normal(const FaceID* facet)
+        glm::vec3 normal(const FaceID* facet) const
         {
             glm::vec3 p1 = position_attribute->at(facet->v1());
             glm::vec3 p2 = position_attribute->at(facet->v2());
@@ -116,7 +116,7 @@ namespace mesh
             return normalize(cross(p2 - p1, p3 - p1));
         }
         
-        glm::vec3 normal(const VertexID* vertex)
+        glm::vec3 normal(const VertexID* vertex) const
         {
             auto n = glm::vec3(0., 0., 0.);
             for (auto face : vertex->faces()) {
@@ -146,47 +146,47 @@ namespace mesh
             }
         }
         
-        const VertexID* vertices_begin()
+        const VertexID* vertices_begin() const
         {
             return start_vertex;
         }
         
-        const VertexID* vertices_end()
+        const VertexID* vertices_end() const
         {
             return nullptr;
         }
         
-        const EdgeID* edges_begin()
+        const EdgeID* edges_begin() const
         {
             return start_edge;
         }
         
-        const EdgeID* edges_end()
+        const EdgeID* edges_end() const
         {
             return nullptr;
         }
         
-        const FaceID* faces_begin()
+        const FaceID* faces_begin() const
         {
             return start_face;
         }
         
-        const FaceID* faces_end()
+        const FaceID* faces_end() const
         {
             return nullptr;
         }
         
-        int get_no_vertices()
+        int get_no_vertices() const
         {
             return no_vertices;
         }
         
-        int get_no_edges()
+        int get_no_edges() const
         {
             return no_edges;
         }
         
-        int get_no_faces()
+        int get_no_faces() const
         {
             return no_faces;
         }
