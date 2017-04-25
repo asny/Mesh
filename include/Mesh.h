@@ -121,12 +121,15 @@ namespace mesh
         glm::vec3 center() const
         {
             auto pos = glm::vec3(0.f, 0.f, 0.f);
+            auto area_sum = 0.f;
             for(auto face = faces_begin(); face != faces_end(); face = face->next())
             {
-                pos += center(face) * area(face);
+                float A = area(face);
+                pos += center(face) * A;
+                area_sum += A;
             }
             
-            return pos / static_cast<float>(get_no_faces());
+            return pos / area_sum;
         }
         
         float area(const FaceID* facet) const
