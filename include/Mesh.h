@@ -108,6 +108,43 @@ namespace mesh
             return position_attribute;
         }
         
+        void transform(glm::mat4 transformation)
+        {
+            for(auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
+            {
+                glm::vec3 pos = position_attribute->at(vertex);
+                glm::vec4 transformed_pos = transformation * glm::vec4(pos, 1.);
+                position_attribute->at(vertex) = glm::vec3(transformed_pos.x, transformed_pos.y, transformed_pos.z);
+            }
+        }
+        
+        glm::vec3 center() const
+        {
+            auto pos = glm::vec3(0.f, 0.f, 0.f);
+            for(auto face = faces_begin(); face != faces_end(); face = face->next())
+            {
+                pos += center(face) * area(face);
+            }
+            
+            return pos / static_cast<float>(get_no_faces());
+        }
+        
+        float area(const FaceID* facet) const
+        {
+            glm::vec3 p1 = position_attribute->at(facet->v1());
+            glm::vec3 p2 = position_attribute->at(facet->v2());
+            glm::vec3 p3 = position_attribute->at(facet->v3());
+            return 0.5f * length(cross(p2 - p1, p3 - p1));
+        }
+        
+        glm::vec3 center(const FaceID* facet) const
+        {
+            glm::vec3 p1 = position_attribute->at(facet->v1());
+            glm::vec3 p2 = position_attribute->at(facet->v2());
+            glm::vec3 p3 = position_attribute->at(facet->v3());
+            return (p1 + p2 + p3) / 3.f;
+        }
+        
         glm::vec3 normal(const FaceID* facet) const
         {
             glm::vec3 p1 = position_attribute->at(facet->v1());
