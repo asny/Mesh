@@ -57,6 +57,27 @@ namespace mesh
             subscribers.push_back(on_attribute_changed);
         }
         
+        void clear()
+        {
+            mapping.clear();
+            on_attribute_changed();
+        }
+        
+        bool contains(const IDType* id)
+        {
+            return mapping.find(*id) != mapping.end();
+        }
+        
+        bool contains(const IDType& id)
+        {
+            return mapping.find(id) != mapping.end();
+        }
+        
+        unsigned long size()
+        {
+            return mapping.size();
+        }
+        
     private:
         std::unordered_map<IDType, Property<ValueType>> mapping;
         std::vector<std::function<void()>> subscribers = std::vector<std::function<void()>>();
