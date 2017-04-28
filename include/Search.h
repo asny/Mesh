@@ -13,15 +13,12 @@ namespace mesh
     class Search
     {
     public:
-        static const VertexID* closest_vertex(const Mesh& mesh, const glm::vec3& origin, const glm::vec3& direction)
-        {
-            auto face = Search::closest_face(mesh, origin, direction);
-            if(!face)
-                return nullptr;
-            return face->v1();
-        }
+        struct Result {
+            const FaceID* face_id;
+            const glm::vec3 point;
+        };
         
-        static const FaceID* closest_face(const Mesh& mesh, const glm::vec3& origin, const glm::vec3& direction)
+        static Result closest_face(const Mesh& mesh, const glm::vec3& origin, const glm::vec3& direction)
         {
             for(auto face = mesh.faces_begin(); face != mesh.faces_end(); face = face->next())
             {
@@ -31,10 +28,11 @@ namespace mesh
                 glm::vec3 output;
                 if(glm::intersectRayTriangle(origin, direction, p1, p2, p3, output))
                 {
-                    return face;
+                    glm::vec3 point = p1 + output.x * (p2 - p1) + output.y * (p3 - p1);
+                    return Result {face, point};
                 }
             }
-            return nullptr;
+            return Result();
         }
         
     };
