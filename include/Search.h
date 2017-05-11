@@ -16,6 +16,11 @@ namespace mesh
         struct Result {
             const FaceID* face_id;
             const glm::vec3 point;
+            
+            bool is_a_hit()
+            {
+                return face_id != nullptr;
+            }
         };
         
         static Result closest_face(const Mesh& mesh, const glm::vec3& origin, const glm::vec3& direction)
