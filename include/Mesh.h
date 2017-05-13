@@ -118,46 +118,6 @@ namespace mesh
             }
         }
         
-        glm::vec3 center() const
-        {
-            auto pos = glm::vec3(0.f, 0.f, 0.f);
-            auto area_sum = 0.f;
-            for(auto face = faces_begin(); face != faces_end(); face = face->next())
-            {
-                float A = area(face);
-                pos += center(face) * A;
-                area_sum += A;
-            }
-            
-            return pos / area_sum;
-        }
-        
-        glm::vec3 min() const
-        {
-            auto pos = glm::vec3(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
-            for(auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
-            {
-                glm::vec3 p = position_attribute->at(vertex);
-                pos.x = std::min(p.x, pos.x);
-                pos.y = std::min(p.y, pos.y);
-                pos.z = std::min(p.z, pos.z);
-            }
-            return pos;
-        }
-        
-        glm::vec3 max() const
-        {
-            auto pos = glm::vec3(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
-            for(auto vertex = vertices_begin(); vertex != vertices_end(); vertex = vertex->next())
-            {
-                glm::vec3 p = position_attribute->at(vertex);
-                pos.x = std::max(p.x, pos.x);
-                pos.y = std::max(p.y, pos.y);
-                pos.z = std::max(p.z, pos.z);
-            }
-            return pos;
-        }
-        
         float area(const FaceID* facet) const
         {
             glm::vec3 p1 = position_attribute->at(facet->v1());
