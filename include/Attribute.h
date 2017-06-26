@@ -12,8 +12,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Property.h"
-
 namespace mesh
 {
     template <class IDType, class ValueType>
@@ -21,46 +19,34 @@ namespace mesh
     {
     public:
         
-        Attribute()
-        {
-            on_property_changed = std::bind(&Attribute::on_attribute_changed, this);
-        }
-        
-        const Property<ValueType>& at(const IDType& id) const
+        const ValueType& at(const IDType& id) const
         {
             return mapping.at(id);
         }
         
-        const Property<ValueType>& at(const IDType* id) const
+        const ValueType& at(const IDType* id) const
         {
             return at(*id);
         }
         
-        Property<ValueType>& at(const IDType& id)
+        ValueType& at(const IDType& id)
         {
             auto it = mapping.find(id);
             if (it == mapping.end())
             {
-                it = mapping.insert(std::make_pair(id, Property<ValueType>(ValueType()))).first;
-                it->second.listen_to(on_property_changed);
+                it = mapping.insert(std::make_pair(id, ValueType())).first;
             }
             return it->second;
         }
         
-        Property<ValueType>& at(const IDType* id)
+        ValueType& at(const IDType* id)
         {
             return at(*id);
-        }
-        
-        void listen_to(std::function<void()> on_attribute_changed)
-        {
-            subscribers.push_back(on_attribute_changed);
         }
         
         void clear()
         {
             mapping.clear();
-            on_attribute_changed();
         }
         
         bool contains(const IDType* id)
@@ -79,16 +65,6 @@ namespace mesh
         }
         
     private:
-        std::unordered_map<IDType, Property<ValueType>> mapping;
-        std::vector<std::function<void()>> subscribers = std::vector<std::function<void()>>();
-        std::function<void()> on_property_changed;
-        
-        void on_attribute_changed()
-        {
-            for(auto callback : subscribers)
-            {
-                callback();
-            }
-        }
+        std::unordered_map<IDType, ValueType> mapping;
     };
 }
